@@ -172,6 +172,7 @@ ssh-keygen -t ed25519 -f id_ed25519
 ## STEP 2 --- Login Using AppRole (Get Vault Token)
 
 ```bash
+export VAULT_ADDR=http://172.236.193.139:8200
 export ROLE_ID="XXX"
 export SECRET_ID="XXX"
 export VAULT_TOKEN=$(vault write -field=token \
@@ -205,6 +206,7 @@ ssh -i id_ed25519 root@172.236.193.212
 
 Get token
 ```bash
+export VAULT_ADDR=http://172.236.193.139:8200
 export ROLE_ID="XXX"
 export SECRET_ID="XXX"
 export VAULT_TOKEN=$(vault write -field=token \
