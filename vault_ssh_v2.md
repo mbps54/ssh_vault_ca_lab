@@ -232,3 +232,80 @@ Login
 ```bash
 ssh -i id_ed25519 root@172.236.193.212
 ```
+
+------------------------------------------------------------------------
+
+# HOW AUTHENTICATION WORKS (WHO USES WHAT)
+
+## Key Files on the Client
+
+After completing the steps, the client has:
+
+  File                    Purpose
+  ----------------------- ---------------------------------------------
+  `id_ed25519`            Private SSH key (secret, never shared)
+  `id_ed25519.pub`        Public SSH key (sent to Vault for signing)
+  `id_ed25519-cert.pub`   Short-lived SSH certificate signed by Vault
+
+Important:
+
+-   The private key **never leaves the client**
+-   The certificate is useless without the private key
+-   The private key alone is not trusted by the server
+
+
+## What Happens During Login
+
+When running:
+
+``` bash
+ssh -i id_ed25519 root@172.236.193.212
+```
+
+The SSH client automatically:
+
+1.  Uses `id_ed25519` to prove possession of the private key
+2.  Detects `id_ed25519-cert.pub` in the same directory
+3.  Sends both the public key and certificate to the target server
+
+## What the Target Server Checks
+
+The Target Server (172.236.193.212):
+
+-   Does NOT use `authorized_keys`
+-   Does NOT store client public keys
+-   Trusts only the Vault CA public key (`/etc/ssh/ca.pub`)
+
+During connection:
+
+1.  SSH verifies that the certificate was signed by Vault CA
+2.  Verifies certificate TTL (30 minutes)
+3.  Verifies allowed principals (`root`, `deploy`, `app`)
+4.  Verifies extensions (`permit-pty`, etc.)
+
+If all checks pass → access is granted.
+
+
+## Full Authentication Chain
+
+Step-by-step trust model:
+
+### 1. AppRole Authentication
+
+Client → Vault
+
+-   Uses `role_id`
+-   Uses `secret_id`
+-   Receives short-lived Vault token
+
+This token is valid for 15 minutes (max 30 minutes).
+
+### 2. Certificate Signing
+
+Client → Vault
+
+-   Sends `id_ed25519.pub`
+-   Vault signs it using its SSH CA private key
+-   Returns short-lived SSH certificate (`id_ed25519-cert.pub`)
+
+Certificate TTL = 30 minutes.
