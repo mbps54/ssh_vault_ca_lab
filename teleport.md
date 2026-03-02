@@ -6,6 +6,10 @@
 
 ![Diagram](diagram/teleport.png)
 
+Demo Video
+
+[Watch the demo on YouTube](https://youtu.be/Q92DtG8OltY)
+
 ## Infrastructure
 
   IP                Role

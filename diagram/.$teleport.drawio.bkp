@@ -4,9 +4,6 @@
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
-        <mxCell id="1KPj1PFe9YuqGVqF1tIc-27" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=none;dashed=1;" vertex="1" parent="1">
-          <mxGeometry x="60" y="10" width="720" height="480" as="geometry" />
-        </mxCell>
         <mxCell id="1KPj1PFe9YuqGVqF1tIc-1" value="Jump host" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
           <mxGeometry x="80" y="230" width="120" height="80" as="geometry" />
         </mxCell>
